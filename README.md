@@ -78,7 +78,12 @@ sudo systemctl enable docker && sudo systemctl start docker
 mkdir ~/teamspeak6 && cd ~/teamspeak6
 ```
 
+
 ### 2. Create `docker-compose.yaml`
+
+```
+nano docker-compose.yaml
+```
 
 ```yaml
 version: '3'
@@ -104,6 +109,21 @@ volumes:
 
 ```bash
 sudo docker-compose up -d
+```
+
+### 4. View logs
+```
+sudo docker-compose logs -f
+```
+
+### 5. Restart container
+```
+sudo docker-compose restart
+```
+
+### 6. Stop the server
+```
+sudo docker-compose down
 ```
 
 ---
