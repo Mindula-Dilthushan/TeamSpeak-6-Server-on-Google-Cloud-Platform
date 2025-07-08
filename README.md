@@ -111,6 +111,7 @@ Restart the server
 sudo docker-compose up -d
 ```
 
+---
 
 ![GitHub issues](https://img.shields.io/github/issues/Mindula-Dilthushan/TeamSpeak-6-Server-on-Google-Cloud-Platform?&labelColor=black&color=eb3b5a&label=Issues&logo=issues&logoColor=black&style=for-the-badge)
 ![GitHub Contributions](https://img.shields.io/github/contributors/Mindula-Dilthushan/TeamSpeak-6-Server-on-Google-Cloud-Platform?&labelColor=black&color=8854d0&style=for-the-badge)
