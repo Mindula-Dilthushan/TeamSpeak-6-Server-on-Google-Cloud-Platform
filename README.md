@@ -1,6 +1,6 @@
-# TeamSpeak 6 Server on Google Cloud Platform
+# TeamSpeak 6 Server on GCP (Docker-Based Setup)
 
-This repository explains how to **self-host a TeamSpeak 6 Server on GCP** using a Virtual Machine (VM) and Docker. It includes a persistent setup with Docker Compose and instructions to make your server available to anyone globally.
+Welcome to your full guide to hosting the **TeamSpeak 6 Server (Beta)** on **Google Cloud Platform (GCP)** using **Docker and Docker Compose**. This setup is secure, persistent, and easy to maintain.
 
 > 🧪 This setup is for the **TeamSpeak 6 Beta Release** — some features may be in development.
 
@@ -13,6 +13,14 @@ This repository explains how to **self-host a TeamSpeak 6 Server on GCP** using 
 - Persistent storage using Docker volumes
 - GCP firewall configuration
 - Supports both TS6 desktop and mobile clients
+
+---
+
+## 📦 Requirements
+
+- A GCP project with billing enabled
+- A VM instance (Ubuntu 22.04 LTS recommended)
+- Docker & Docker Compose installed
 
 ---
 
@@ -45,71 +53,74 @@ Go to **VPC > Firewall rules** → **Create Firewall Rule**
 
 ---
 
-### 3. SSH Into Your VM
+## 🐳 Docker Setup
 
-From GCP Console or CLI:
+### 1. SSH into the VM
 
 ```bash
 gcloud compute ssh teamspeak6-vm
 ```
 
-### 4. Install Docker & Docker Compose
-
-Update system
-```bash
-sudo apt update && sudo apt upgrade -y
-```
-
-Install Docker
-```bash
-sudo apt install -y docker.io
-```
-
-Start Docker
-```bash
-sudo systemctl enable docker
-```
+### 2. Install Docker & Docker Compose
 
 ```bash
-sudo systemctl start docker
+sudo apt update && sudo apt install -y docker.io docker-compose
+sudo systemctl enable docker && sudo systemctl start docker
 ```
 
-Install Docker Compose V1
-```bash
-sudo apt install -y docker-compose
-```
+---
 
-### 5. Clone This Repo and Start the Server
-Clone the repo
-```bash
-git clone https://github.com/teamspeak/teamspeak6-server.git
-```
+## 🧰 Run TeamSpeak 6 Server
+
+### 1. Create Directory
 
 ```bash
-cd teamspeak6-server
+mkdir ~/teamspeak6 && cd ~/teamspeak6
 ```
 
-Start the container
-```bash
-sudo docker-compose up -d
+### 2. Create `docker-compose.yaml`
+
+```yaml
+version: '3'
+
+services:
+  teamspeak:
+    image: teamspeaksystems/teamspeak6-server:latest
+    container_name: teamspeak-server
+    restart: unless-stopped
+    ports:
+      - "9987:9987/udp"   # Voice port
+      - "30033:30033/tcp" # File transfer
+    environment:
+      - TSSERVER_LICENSE_ACCEPTED=accept
+    volumes:
+      - teamspeak-data:/var/tsserver/
+
+volumes:
+  teamspeak-data:
 ```
 
-## Useful Commands
+### 3. Start Server
 
-See logs
-```bash
-sudo docker-compose logs -f
-```
-
-Stop the server
-```bash
-sudo docker-compose down
-```
-
-Restart the server
 ```bash
 sudo docker-compose up -d
 ```
+
+---
+
+## 🎮 Connect to TeamSpeak 6
+
+- Download the [TS6 Client](https://teamspeak.com/en/downloads)
+- Connect using your GCP **external IP** on port **9987**
+- Default 32-slot preview license is preloaded (valid for 2 months)
+
+---
+
+## 📄 Resources
+
+- [Official TS6 Website](https://teamspeak.com/)
+- [Docker Hub – TS6 Server](https://hub.docker.com/r/teamspeaksystems/teamspeak6-server)
+- [Community Forum](https://community.teamspeak.com/)
 
 ---
 
